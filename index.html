@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mix & Glow – Beauty Shop & Makeup Guide</title>
+
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background: #ffe4f1;
+            color: #4a2c3e;
+        }
+
+        header {
+            background: linear-gradient(120deg, #ff9acb, #ff73b9);
+            padding: 50px 20px;
+            text-align: center;
+            color: white;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 3rem;
+        }
+
+        nav {
+            background: #fff;
+            border-bottom: 1px solid #ffd6e7;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        nav a {
+            color: #c03c7a;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            margin-top: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            color: #d6458c;
+            margin-top: 0;
+        }
+
+        /* PRODUCT cards */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .shop-item {
+            background: #ffecf6;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ffd1e6;
+            text-align: center;
+        }
+        .shop-item img {
+            width: 100%;
+            border-radius: 8px;
+        }
+        .price {
+            color: #c03c7a;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .buy-btn {
+            background: #ff73b9;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .buy-btn:hover {
+            background: #e05097;
+        }
+
+        .tips {
+            background: #ffe0f0;
+            padding: 15px 20px;
+            border-left: 5px solid #ff73b9;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            background: #ffd3ea;
+            color: #8b4664;
+        }
+
+        /* CART BUTTON */
+        #cart-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff73b9;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 55px;
+            height: 55px;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 50;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        /* CART PANEL */
+        #cart-panel {
+            position: fixed;
+            right: -350px;
+            top: 0;
+            width: 350px;
+            height: 100vh;
+            background: #fff;
+            border-left: 2px solid #ffd1e6;
+            padding: 20px;
+            transition: 0.4s;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .cart-item {
+            border-bottom: 1px solid #ffd1e6;
+            padding: 10px 0;
+        }
+
+        .remove-btn {
+            background: #e05097;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        #checkout-btn {
+            width: 100%;
+            background: #ff73b9;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Mix & Glow</h1>
+    <p>Your pink-perfect beauty shop & makeup guide ✨</p>
+</header>
+
+<nav>
+    <a href="#about">About Us</a>
+    <a href="#intro">Intro</a>
+    <a href="#steps">Steps</a>
+    <a href="#shop">Shop</a>
+</nav>
+
+<!-- CART BUTTON -->
+<button id="cart-btn">🛒</button>
+
+<!-- CART PANEL -->
+<div id="cart-panel">
+    <h2>Coșul tău</h2>
+    <div id="cart-items"></div>
+    <h3>Total: <span id="total">0</span> $</h3>
+    <button id="checkout-btn">Checkout</button>
+</div>
+
+<!-- ABOUT US -->
+<section id="about">
+    <h2>About Us</h2>
+    <p>
+        La <strong>Mix & Glow</strong>, credem că frumusețea înseamnă încredere, joacă și libertate.
+        Aici găsești ghiduri simple, produse de top și inspirație pentru a-ți crea propriul stil.
+    </p>
+
+    <p>Misiunea noastră este:</p>
+    <ul>
+        <li>✨ Să îți oferim informații ușoare și clare</li>
+        <li>✨ Să descoperi produse de la branduri populare</li>
+        <li>✨ Să te simți frumoasă și încrezătoare în pielea ta</li>
+        <li>✨ Să ai parte de o experiență 100% roz și magică 💖</li>
+    </ul>
+
+    <p>
+        Indiferent dacă ești începătoare sau expertă,
+        suntem aici să te ajutăm să <strong>strălucești</strong> în fiecare zi.
+    </p>
+</section>
+
+<section id="intro">
+    <h2>Welcome to Mix & Glow</h2>
+    <p>
+        Mix & Glow este un beauty hub complet – învață machiajul,
+        urmează pași simpli și cumpără produse din brandurile tale preferate:
+    </p>
+    <ul>
+        <li>💖 Sephora Collection</li>
+        <li>💖 DM (Drogerie Markt)</li>
+        <li>💖 NYX Cosmetics</li>
+        <li>💖 Bubble Skincare</li>
+    </ul>
+</section>
+
+<section id="steps">
+    <h2>Step-by-Step Makeup Application</h2>
+    <ol>
+        <li>Curăță și hidratează tenul.</li>
+        <li>Aplică primer.</li>
+        <li>Pune fond de ten.</li>
+        <li>Folosește concealer.</li>
+        <li>Setează cu pudră.</li>
+        <li>Conturează sprâncenele.</li>
+        <li>Aplică fard de ochi.</li>
+        <li>Eyeliner (opțional).</li>
+        <li>Mascara.</li>
+        <li>Blush + iluminator + ruj.</li>
+    </ol>
+
+    <p class="tips">💗 Pro Tip: folosește un burețel umed pentru un finish natural!</p>
+</section>
+
+<section id="shop">
+    <h2>Shop Your Favorite Beauty Products</h2>
+    <p>Apasă "Adaugă în coș" pentru a cumpăra produsele.</p>
+
+    <div class="shop-grid">
+
+        <div class="shop-item" data-name="Sephora Primer" data-price="18">
+            <img src="https://via.placeholder.com/200x250.png?text=Sephora+Primer">
+            <h4>Sephora Perfecting Primer</h4>
+            <p class="price">$18.00</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="Lip Gloss Shine" data-price="12">
+            <img src="https://via.placeholder.com/200x250.png?text=Lip+Gloss">
+            <h4>Sephora Glossed Lip Shine</h4>
+            <p class="price">$12.00</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="DM Natural Foundation" data-price="9.99">
+            <img src="https://via.placeholder.com/200x250.png?text=DM+Foundation">
+            <h4>DM Natural Finish Foundation</h4>
+            <p class="price">$9.99</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="NYX Blush" data-price="9">
+            <img src="https://via.placeholder.com/200x250.png?text=NYX+Blush">
+            <h4>NYX Sweet Cheeks Blush</h4>
+            <p class="price">$9.00</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+    </div>
+</section>
+
+<footer>
+    <p>© 2025 Mix & Glow — Shop, shine, and glow beautifully 💖</p>
+</footer>
+
+<script>
+    const cartBtn = document.getElementById("cart-btn");
+    const cartPanel = document.getElementById("cart-panel");
+    const cartItems = document.getElementById("cart-items");
+    const totalEl = document.getElementById("total");
+
+    let cart = [];
+
+    // Toggle cart
+    cartBtn.addEventListener("click", () => {
+        cartPanel.style.right = cartPanel.style.right === "0px" ? "-350px" : "0px";
+    });
+
+    // Add to cart
+    document.querySelectorAll(".buy-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const item = e.target.closest(".shop-item");
+            const name = item.dataset.name;
+            const price = parseFloat(item.dataset.price);
+
+            cart.push({ name, price });
+            updateCart();
+        });
+    });
+
+    // Update cart
+    function updateCart() {
+        cartItems.innerHTML = "";
+        let total = 0;
+
+        cart.forEach((item, index) => {
+            total += item.price;
+
+            const div = document.createElement("div");
+            div.classList.add("cart-item");
+            div.innerHTML = `
+                <p><strong>${item.name}</strong> — $${item.price}</p>
+                <button class="remove-btn" onclick="removeItem(${index})">Șterge</button>
+            `;
+            cartItems.appendChild(div);
+        });
+
+        totalEl.textContent = total.toFixed(2);
+    }
+
+    function removeItem(index) {
+        cart.splice(index, 1);
+        updateCart();
+    }
+
+    document.getElementById("checkout-btn").addEventListener("click", () => {
+        alert("Mulțumim pentru comandă! Aici poți integra un checkout real ✨");
+    });
+</script>
+
+</body>
+</html><section id="shop">
+    <h2>Shop Your Favorite Beauty Products</h2>
+    <p>Alege produsele preferate și adaugă-le în coș! 💖</p>
+
+    <!-- SEPHORA -->
+    <h3 style="color:#d6458c;">Sephora Favorites</h3>
+    <div class="shop-grid">
+
+        <div class="shop-item" data-name="Sephora Primer" data-price="18">
+            <img src="https://via.placeholder.com/200x250.png?text=Primer">
+            <h4>Sephora Perfecting Primer</h4>
+            <p class="price">$18</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="Sephora Lip Gloss" data-price="12">
+            <img src="https://via.placeholder.com/200x250.png?text=Lip+Gloss">
+            <h4>Sephora Glossed Lip Shine</h4>
+            <p class="price">$12</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="Sephora Foundation" data-price="22">
+            <img src="https://via.placeholder.com/200x250.png?text=Foundation">
+            <h4>Sephora Best Skin Ever Foundation</h4>
+            <p class="price">$22</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="Sephora Blush" data-price="14">
+            <img src="https://via.placeholder.com/200x250.png?text=Blush">
+            <h4>Sephora Cream Blush</h4>
+            <p class="price">$14</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+    </div>
+
+    <!-- DM -->
+    <h3 style="color:#d6458c;">DM Beauty</h3>
+    <div class="shop-grid">
+
+        <div class="shop-item" data-name="DM Foundation" data-price="9.99">
+            <img src="https://via.placeholder.com/200x250.png?text=DM+Foundation">
+            <h4>DM Natural Finish Foundation</h4>
+            <p class="price">$9.99</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="DM Powder" data-price="7.50">
+            <img src="https://via.placeholder.com/200x250.png?text=DM+Powder">
+            <h4>DM Perfect Powder Compact</h4>
+            <p class="price">$7.50</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="DM Concealer" data-price="6">
+            <img src="https://via.placeholder.com/200x250.png?text=Concealer">
+            <h4>DM Full Cover Concealer</h4>
+            <p class="price">$6</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="DM Mascara" data-price="8">
+            <img src="https://via.placeholder.com/200x250.png?text=Mascara">
+            <h4>DM Volume Mascara</h4>
+            <p class="price">$8</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+    </div>
+
+    <!-- NYX -->
+    <h3 style="color:#d6458c;">NYX Cosmetics</h3>
+    <div class="shop-grid">
+
+        <div class="shop-item" data-name="NYX Blush" data-price="9">
+            <img src="https://via.placeholder.com/200x250.png?text=NYX+Blush">
+            <h4>NYX Sweet Cheeks Blush</h4>
+            <p class="price">$9</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="NYX Mascara" data-price="11">
+            <img src="https://via.placeholder.com/200x250.png?text=Mascara">
+            <h4>NYX On-The-Rise Mascara</h4>
+            <p class="price">$11</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="NYX Lipstick" data-price="10">
+            <img src="https://via.placeholder.com/200x250.png?text=Lipstick">
+            <h4>NYX Matte Lipstick</h4>
+            <p class="price">$10</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="NYX Eyeliner" data-price="8">
+            <img src="https://via.placeholder.com/200x250.png?text=Eyeliner">
+            <h4>NYX Epic Ink Eyeliner</h4>
+            <p class="price">$8</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+    </div>
+
+    <!-- BUBBLE SKINCARE -->
+    <h3 style="color:#d6458c;">Bubble Skincare</h3>
+    <div class="shop-grid">
+
+        <div class="shop-item" data-name="Bubble Moisturizer" data-price="16">
+            <img src="https://via.placeholder.com/200x250.png?text=Moisturizer">
+            <h4>Bubble Level Up Moisturizer</h4>
+            <p class="price">$16</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="Bubble Cleanser" data-price="14">
+            <img src="https://via.placeholder.com/200x250.png?text=Cleanser">
+            <h4>Bubble Fresh Start Cleanser</h4>
+            <p class="price">$14</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="Bubble Toner" data-price="15">
+            <img src="https://via.placeholder.com/200x250.png?text=Toner">
+            <h4>Bubble Bounce Back Toner</h4>
+            <p class="price">$15</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+        <div class="shop-item" data-name="Bubble Serum" data-price="18">
+            <img src="https://via.placeholder.com/200x250.png?text=Serum">
+            <h4>Bubble Brightening Serum</h4>
+            <p class="price">$18</p>
+            <button class="buy-btn">Adaugă în coș</button>
+        </div>
+
+    </div>
+
+</section><section id="shop">
+  <h2>Shop Your Favorite Beauty Products</h2>
+  <p>Alege produsele preferate și adaugă-le în coș! 💖</p>
+
+  <div class="shop-grid">
+
+    <div class="shop-item" data-name="Sephora Primer" data-price="18">
+      <img src="/mnt/data/faef92c3-4ce1-42ec-8dc3-7b5e4e352c3b.png" alt="Sephora Perfecting Primer">
+      <h4>Sephora Perfecting Primer</h4>
+      <p class="price">$18.00</p>
+      <button class="buy-btn">Adaugă în coș</button>
+    </div>
+
+    <div class="shop-item" data-name="Lip Gloss Shine" data-price="12">
+      <img src="https://pxhere.com/en/photo/979236" alt="Sephora Glossed Lip Shine">
+      <h4>Sephora Glossed Lip Shine</h4>
+      <p class="price">$12.00</p>
+      <button class="buy-btn">Adaugă în coș</button>
+    </div>
+
+    <div class="shop-item" data-name="DM Natural Foundation" data-price="9.99">
+      <img src="https://negativespace.co/wp-content/uploads/2020/06/cosmetic-product.jpg" alt="DM Natural Finish Foundation">
+      <h4>DM Natural Finish Foundation</h4>
+      <p class="price">$9.99</p>
+      <button class="buy-btn">Adaugă în coș</button>
+    </div>
+
+    <div class="shop-item" data-name="NYX Blush" data-price="9">
+      <img src="https://coverr.co/free-stock-images/cosmetics-smudge-palette.jpg" alt="NYX Sweet Cheeks Blush">
+      <h4>NYX Sweet Cheeks Blush</h4>
+      <p class="price">$9.00</p>
+      <button class="buy-btn">Adaugă în coș</button>
+    </div>
+
+  </div>
+</section>
+
+
+
+
